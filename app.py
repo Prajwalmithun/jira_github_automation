@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 import requests
 from requests.auth import HTTPBasicAuth
 import json
@@ -35,16 +35,21 @@ def createJiraTicket():
     "update": {}
     } )
 
-    response = requests.request(
-    "POST",
-    url,
-    data=payload,
-    headers=headers,
-    auth=auth
-    )
-
-    return json.dumps(json.loads(response.text), sort_keys=True, indent=4, separators=(",", ": "))
+    # Get the incoming data from the request (Return Type is Dictionary)
+    data = request.get_json()
     
+    # Create a Jira Ticket only when the comment is /jira
+    if data["comment"]["body"] == "/jira":
+        response = requests.request(
+        "POST",
+        url,
+        data=payload,
+        headers=headers,
+        auth=auth
+        )
+        return json.dumps(json.loads(response.text), sort_keys=True, indent=4, separators=(",", ": "))
+    
+    return "No Jira Ticket Created. Please type /jira to create a Jira Ticket"
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=5000)
