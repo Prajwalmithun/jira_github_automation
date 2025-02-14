@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 import requests
 from requests.auth import HTTPBasicAuth
 import json
@@ -49,7 +49,10 @@ def createJiraTicket():
         )
         return json.dumps(json.loads(response.text), sort_keys=True, indent=4, separators=(",", ": "))
     
-    return "No Jira Ticket Created. Please type /jira to create a Jira Ticket"
+    return jsonify(
+        {
+            "error": "No Jira Ticket Created. Please type /jira to create a Jira Ticket"
+        }), 400
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
