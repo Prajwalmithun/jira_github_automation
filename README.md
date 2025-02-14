@@ -26,7 +26,9 @@
 
 ## To run the project with docker
 
-1. Create a .env file (Refer `.env-sample` file)
+1. Create a .env file (Refer `.env-sample` file) 
+
+2. Run the container
 
     ```bash
     docker run -dit --env-file .env -p 5000:5000 prajwal3498/jira-github-integration:latest
